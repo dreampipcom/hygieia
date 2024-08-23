@@ -20,27 +20,6 @@ export async function fetchWithTimeout(resource: string, options: any) {
   return response;
 }
 
-// fetch("https://www.dreampip.com/api/nexus/audio", {
-//   "headers": {
-//     "accept": "*/*",
-//     "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-//     "cache-control": "no-cache",
-//     "pragma": "no-cache",
-//     "priority": "i",
-//     "range": "bytes=0-",
-//     "sec-ch-ua": "\"Chromium\";v=\"127\", \"Not)A;Brand\";v=\"99\"",
-//     "sec-ch-ua-mobile": "?0",
-//     "sec-ch-ua-platform": "\"macOS\"",
-//     "sec-fetch-dest": "audio",
-//     "sec-fetch-mode": "no-cors",
-//     "sec-fetch-site": "same-origin",
-//     "Referer": "https://www.dreampip.com/en",
-//     "Referrer-Policy": "strict-origin-when-cross-origin"
-//   },
-//   "body": null,
-//   "method": "GET"
-// });
-
 
 export async function GET() {
 
