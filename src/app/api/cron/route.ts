@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 
 async function fetchWithTimeout(resource: string, options: any) {
-  const { timeout = 3000 } = options;
+  const { timeout = 15000 } = options;
 
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
