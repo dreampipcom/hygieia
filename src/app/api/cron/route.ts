@@ -17,11 +17,11 @@ export async function GET() {
       public: "",
     },
     nyx: {
-      render: "",
+      homepage: "",
     },
     morpheus: {
       cms: "",
-      render: "",
+      homepage: "",
     },
     euterpe: {
       audio: "",
@@ -79,7 +79,6 @@ export async function GET() {
   const deepWalk = (parent) => {
       return Object.keys(parent).flatMap((child) => {
         if(Array.isArray(parent[child]) && typeof parent[child] === 'object') {
-          console.log("array", { childe: parent[child] })
           return parent[child]
         }
 
@@ -108,14 +107,11 @@ export async function GET() {
   }, {});
 
   for(const service of Object.keys(promises)) {
-    console.log({ service })
     let count = 0
     for(const microservice of promises[service]) {
       const names = Object.keys(services[service])
-      console.log({ promises, microservice, names })
       const serviceStatus = await microservice
-      console.log({ serviceStatus })
-      status[service][names[count]] = serviceStatus ? 'normal' : 'degraded';
+      status[service][names[count]] = !!serviceStatus ? 'normal' : 'degraded';
       count++
     }
   }
