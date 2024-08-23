@@ -92,7 +92,7 @@ export async function GET() {
     },
   };
 
-  const deepWalk = (parent: any) => {
+  const deepWalk = (parent: any): any => {
     return Object.keys(parent).flatMap((child: any) => {
       if (Array.isArray(parent[child]) && typeof parent[child] === "object") {
         return parent[child];
