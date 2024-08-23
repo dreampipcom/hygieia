@@ -1,0 +1,11 @@
+# .eslintignore
+
+.github/
+
+# temporary
+system/
+components/
+nsx/
+mock/
+
+

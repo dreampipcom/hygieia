@@ -1,0 +1,308 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../node_modules/@dreampipcom/db-public/prisma-client"
+}
+
+datasource db {
+  provider        = "mongodb"
+  url             = env("PRISMA_PUBLIC_URI")
+  directUrl       = env("MONGODB_PUBLIC_URI")
+}
+
+model test {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model PublicListings {
+  id                  String            @id @default(auto()) @map("_id") @db.ObjectId
+  title               ILocaleString
+  description         ILocaleString
+  status              EListingStatus
+  location            ILocation
+  taxonomies          ITaxonomiesFacade[]
+  reviews             IReviewFacade[]
+
+  communityOwner          ICommunityFacade
+  communityCreator        ICommunityFacade
+  userOwner           IUserFacade
+  userCreator         IUserFacade
+
+  @@map("public_listings")
+}
+
+type IUserFacade {
+  id      String       @db.ObjectId
+  image     String
+  firstName     String
+}
+
+// pvt:communities
+enum ECommunitiestatus {
+  ACTIVE
+  PENDING
+  INACTIVE
+  DELETED
+}
+
+type ICommunityFacade {
+  id      String       @db.ObjectId
+  image     String
+  name      String
+  urls      String[]
+  status      ECommunitiestatus
+}
+
+// globals
+
+type ILocaleString {
+  es        String?
+  ca        String?
+  ga        String?
+  eu        String?
+  en        String?
+  cy        String?
+  mt        String?
+  is        String?
+  it        String?
+  pt        String?
+  de        String?
+  fr        String?
+  pl        String?
+  et        String?
+  cz        String?
+  sv        String?
+  da        String?
+  nl        String?
+  nb        String?
+  nn        String?
+  ro        String?
+  sr        String?
+  sl        String?
+  lv        String?
+  lt        String?
+  hr        String?
+  el        String?
+  hu        String?
+  bg        String?
+  bs        String?
+  sq        String?
+}
+
+enum ECurrency {
+  EUR
+  NOK
+  SEK
+  CHF
+  GBP
+  CZK
+  PLZ
+  USD
+}
+
+
+// pvt:offers
+
+type ITaxesAndFees {
+  taxes       Float
+  fees        Float
+  shipping    Float
+}
+
+enum EOfferStatus {
+  ACTIVE
+  PENDING
+  INACTIVE
+  DELETED
+}
+
+type IOfferFacade {
+  id             String       @db.ObjectId
+  name           ILocaleString
+  description    ILocaleString
+  cost           Float
+  currency       ECurrency
+  surcharges     ITaxesAndFees[]
+  discounts      Float
+  status         EOfferStatus
+  launch         DateTime
+}
+
+// pvt:campaigns
+
+enum ECampaignStatus {
+  ACTIVE
+  PENDING
+  INACTIVE
+  DELETED
+}
+
+type IAudienceFacade {
+  id             String       @db.ObjectId
+  name           ILocaleString
+  description    ILocaleString
+  status         ECampaignStatus
+}
+
+type IAdsDecorator {
+  id             String       @db.ObjectId
+  name           ILocaleString
+  description    ILocaleString
+  status         ECampaignStatus
+  userFits       Boolean?
+  communityFits      Boolean?
+}
+
+// pvt:taxonomies
+enum ETaxonomyStatus {
+  ACTIVE
+  PENDING
+  INACTIVE
+  DELETED
+}
+
+enum ETaxonomyType {
+  TAG
+  ANOTHER_TAG
+}
+
+enum ETaxonomyNature {
+  SEGMENTED
+  PUBLIC
+}
+
+type ITaxonomiesFacade {
+  id              String       @db.ObjectId
+  name            ILocaleString
+  description     ILocaleString
+  status          ETaxonomyStatus
+  type            ETaxonomyType
+  nature          ETaxonomyNature
+  audiencesIds    String[]       @db.ObjectId
+}
+
+// pvt:reviews
+enum EMessageType {
+  ANNOUNCEMENT
+  CAMPAIGN
+  REVIEW
+  CHAT
+  SUPPORT
+}
+
+enum EMessageStatus {
+  SCHEDULED
+  PENDING
+  DELIVERED
+  VIEWED
+}
+
+enum EMessageNature {
+  PRIVATE
+  SEMI_PRIVATE
+  PUBLIC
+}
+
+enum EReviewStatus {
+  ACTIVE
+  PENDING
+  INACTIVE
+  DELETED
+}
+
+type IMessageFacade {
+  id          String
+  name        ILocaleString
+  description ILocaleString
+  type        EMessageType
+  status      EMessageStatus
+  nature      EMessageNature
+  title       ILocaleString
+  body        ILocaleString
+  queuedOn    DateTime
+  scheduledOn DateTime
+  sentOn      DateTime
+}
+
+enum EImpression {
+  POSITIVE
+  NEGATIVE
+  NEUTRAL
+}
+
+enum ERating {
+  ZERO
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+  SIX
+  SEVEN
+  EIGHT
+  NINE
+  TEN
+}
+
+type IReviewFacade {
+  id            String       @db.ObjectId
+  status        EReviewStatus
+  message       IMessageFacade
+  rating        ERating
+  impression    EImpression
+  user          IUserFacade
+  community         ICommunityFacade
+  listing       String
+}
+
+// pvt:catalogue
+
+enum ECatalogueItemType {
+  SERVICE
+  FEE
+  SUBSCRIPTION
+}
+
+enum ECatalogueItemStatus {
+  ACTIVE
+  PENDING
+  INACTIVE
+  DELETED
+}
+
+type ICatalogueFacade {
+  id             String       @db.ObjectId
+  name           ILocaleString
+  description    ILocaleString
+  remarks        ILocaleString
+  status         ECatalogueItemStatus
+  type           ECatalogueItemType
+  taxonomies     ITaxonomiesFacade[]
+}
+
+// public_listings
+
+enum EListingStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+type IPosix {
+  lat    Float
+  lng    Float
+  radius Float
+}
+
+type IRedactedAddress {
+  city           String
+  province       String
+  country        String
+  zipCode        String
+}
+
+type ILocation {
+  geo            IPosix
+  address        IRedactedAddress
+  name           String
+}

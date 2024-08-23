@@ -1,0 +1,47 @@
+{
+  "name": "@dreampipcom/hygieia",
+  "description": "DreamPip's App Health Status Service.",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Angelo Reale",
+  "license": "HPL3-ECO-AND-ANC",
+  "scripts": {
+    "dev": "next dev -p 1212",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "next lint && prettier --check --ignore-path .gitignore --ignore-path .prettierignore .",
+    "format:fix": "next lint --fix && prettier --write --ignore-path .gitignore --ignore-path .prettierignore .",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@sentry/nextjs": "^8.20.0",
+    "next": "14.2.4"
+  },
+  "devDependencies": {
+    "@babel/core": "7.23.7",
+    "@babel/eslint-parser": "7.23.3",
+    "@types/json-schema": "7.0.15",
+    "@types/node": "20",
+    "@types/react": "18.3.4",
+    "@types/uuid": "9.0.8",
+    "@typescript-eslint/eslint-plugin": "6.19.0",
+    "@upstash/ratelimit": "2.0.1",
+    "@vercel/edge": "1.1.2",
+    "@vercel/functions": "1.4.0",
+    "@vercel/kv": "2.0.0",
+    "bson": "6.8.0",
+    "eslint": "8",
+    "eslint-config-alloy": "5.1.2",
+    "eslint-config-next": "14.0.4",
+    "husky": "9.0.11",
+    "lodash": "4.17.21",
+    "prettier": "3.2.4",
+    "server-only": "0.0.1",
+    "socket.io": "4.7.5",
+    "ts-node": "10.9.2",
+    "typescript": "5",
+    "uuid": "9.0.1"
+  }
+}
