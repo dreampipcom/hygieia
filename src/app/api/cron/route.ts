@@ -93,7 +93,14 @@ export async function GET() {
       private: [
         {
           url: "https://www.dreampip.com/api/v1/user",
-          check: checkService,
+          check: (url) => {
+            return checkService(url, {
+              method: 'HEAD',
+              headers: {
+                "range": "bytes=0-1",
+              },
+            })
+          },
         },
       ],
       public: [
