@@ -1,5 +1,10 @@
 {
-  "extends": ["next/core-web-vitals", "alloy", "alloy/react", "alloy/typescript"],
+  "extends": [
+    "next/core-web-vitals",
+    "alloy",
+    "alloy/react",
+    "alloy/typescript"
+  ],
   "env": {
     "browser": true,
     "amd": true,
