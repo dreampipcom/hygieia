@@ -2,14 +2,42 @@
 /* add ts later */
 import { NextResponse } from "next/server";
 
+
+export async function fetchWithTimeout(resource: string, options: any) {
+  const { timeout = 2000 } = options;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  const promise = await fetch(resource, {
+    ...options,
+    signal: controller.signal,
+  });
+
+  const response = promise;
+  clearTimeout(id);
+
+  return response;
+}
+
+
 export async function GET() {
-  const checkGetService = async (url: string, opts: any) => {
-    const res = await fetch(url, opts);
 
-    if (!res.ok) return false;
-    if (res.status !== 200) return false;
+  const checkService = async (url: string, opts: any) => {
+    try {
+      const res = await fetchWithTimeout(url, opts || {});
 
-    return true;
+      if (!res.ok ||
+        res.status !== 200) {
+        console.error("--- ERROR: ", { url, status: res.status, message: res.body })
+        return false;
+      }
+
+      return true;
+    } catch(e) {
+      console.error("--- ERROR: ", { url, status: 0, message: e })
+      return false;
+    }
   };
 
   const status = {
@@ -38,19 +66,19 @@ export async function GET() {
       auth: [
         {
           url: "https://www.dreampip.com/api/auth/session",
-          check: checkGetService,
+          check: checkService,
         },
       ],
       private: [
         {
           url: "https://www.dreampip.com/api/v1/user",
-          check: checkGetService,
+          check: checkService,
         },
       ],
       public: [
         {
           url: "https://www.dreampip.com/api/v1/public",
-          check: checkGetService,
+          check: checkService,
         },
       ],
     },
@@ -58,7 +86,7 @@ export async function GET() {
       homepage: [
         {
           url: "https://www.dreampip.com/dash/signin",
-          check: checkGetService,
+          check: checkService,
         },
       ],
     },
@@ -66,21 +94,25 @@ export async function GET() {
       cms: [
         {
           url: "https://www.dreampip.com/episodes",
-          check: checkGetService,
+          check: checkService,
         },
       ],
       homepage: [
         {
           url: "https://www.dreampip.com/",
-          check: checkGetService,
+          check: checkService,
         },
       ],
     },
     euterpe: {
       audio: [
         {
-          url: "https://www.dreampip.com/api/nexus",
-          check: checkGetService,
+          url: "https://www.dreampip.com/api/nexus/audio",
+          check: (url) => {
+            return checkService(url, {
+              method: 'HEAD',
+            })
+          },
         },
       ],
     },
@@ -88,7 +120,36 @@ export async function GET() {
       rickmorty: [
         {
           url: "https://rickandmortyapi.com/graphql",
-          check: checkGetService,
+          check: (url) => {
+            const CHARS = `
+              query {
+                characters() {
+                  info {
+                    count
+                  }
+                  results {
+                    id
+                    name
+                    status
+                    origin {
+                      name
+                    }
+                    location {
+                      name
+                    }
+                    image
+                  }
+                }
+              }
+              `;
+            return checkService(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ query: CHARS })
+            })
+          }
         },
       ],
     },
