@@ -5,7 +5,7 @@ export async function GET() {
     const res = await fetch(url, opts);
 
     if (!res.ok) return false;
-    if (!res.statusCode === 200) return false;
+    if (res.status !== 200) return false;
 
     return true;
   };
