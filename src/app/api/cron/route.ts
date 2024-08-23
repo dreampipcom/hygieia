@@ -207,6 +207,6 @@ export async function GET() {
       count++;
     }
   }
-
+  console.log({ status })
   return NextResponse.json({ ok: true, status });
 }
