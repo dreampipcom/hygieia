@@ -74,9 +74,9 @@ export async function GET() {
           url: "https://www.dreampip.com/api/v1/user",
           check: (url) => {
             return checkService(url, {
-              method: "HEAD",
+              method: "POST",
               headers: {
-                range: "bytes=0-1",
+                'x-dp-keepalive': process.env.NEXUS_KEEPALIVE,
               },
             });
           },
