@@ -2,8 +2,7 @@
 /* add ts later */
 import { NextResponse } from "next/server";
 
-
-export async function fetchWithTimeout(resource: string, options: any) {
+async function fetchWithTimeout(resource: string, options: any) {
   const { timeout = 3000 } = options;
 
   const controller = new AbortController();
@@ -20,22 +19,23 @@ export async function fetchWithTimeout(resource: string, options: any) {
   return response;
 }
 
-
 export async function GET() {
-
   const checkService = async (url: string, opts: any) => {
     try {
       const res = await fetchWithTimeout(url, opts || {});
 
-      if (!res.ok ||
-        res.status !== 200) {
-        console.error("--- ERROR: ", { url, status: res.status, message: res.body })
+      if (!res.ok || res.status !== 200) {
+        console.error("--- ERROR: ", {
+          url,
+          status: res.status,
+          message: res.body,
+        });
         return false;
       }
 
       return true;
-    } catch(e) {
-      console.error("--- ERROR: ", { url, status: 0, message: e })
+    } catch (e) {
+      console.error("--- ERROR: ", { url, status: 0, message: e });
       return false;
     }
   };
@@ -74,11 +74,11 @@ export async function GET() {
           url: "https://www.dreampip.com/api/v1/user",
           check: (url) => {
             return checkService(url, {
-              method: 'HEAD',
+              method: "HEAD",
               headers: {
-                "range": "bytes=0-1",
+                range: "bytes=0-1",
               },
-            })
+            });
           },
         },
       ],
@@ -117,11 +117,11 @@ export async function GET() {
           url: "https://www.dreampip.com/api/nexus/audio",
           check: (url) => {
             return checkService(url, {
-              method: 'GET',
+              method: "GET",
               headers: {
-                "range": "bytes=0-1",
+                range: "bytes=0-1",
               },
-            })
+            });
           },
         },
       ],
@@ -153,13 +153,13 @@ export async function GET() {
               }
               `;
             return checkService(url, {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify({ query: CHARS })
-            })
-          }
+              body: JSON.stringify({ query: CHARS }),
+            });
+          },
         },
       ],
     },
@@ -175,25 +175,28 @@ export async function GET() {
     });
   };
 
-  const promises = Object.keys(services).reduce((statusLog: any, service: any) => {
-    const microservice = services[service] as unknown as any;
+  const promises = Object.keys(services).reduce(
+    (statusLog: any, service: any) => {
+      const microservice = services[service] as unknown as any;
 
-    let iteree;
+      let iteree;
 
-    if (!Array.isArray(microservice)) {
-      iteree = deepWalk(microservice);
-    } else {
-      iteree = microservice;
-    }
+      if (!Array.isArray(microservice)) {
+        iteree = deepWalk(microservice);
+      } else {
+        iteree = microservice;
+      }
 
-    statusLog[service] = [];
+      statusLog[service] = [];
 
-    iteree.forEach((promise: any, index: number) => {
-      statusLog[service][index] = promise.check(promise.url);
-    });
+      iteree.forEach((promise: any, index: number) => {
+        statusLog[service][index] = promise.check(promise.url);
+      });
 
-    return statusLog;
-  }, {});
+      return statusLog;
+    },
+    {},
+  );
 
   for (const service of Object.keys(promises)) {
     let count = 0;
