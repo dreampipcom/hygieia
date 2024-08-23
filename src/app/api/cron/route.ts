@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const checkGetService = async (url, opts) => {
+  const checkGetService = async (url: string, opts: any) => {
     const res = await fetch(url, opts);
 
     if (!res.ok) return false;
@@ -92,8 +92,8 @@ export async function GET() {
     },
   };
 
-  const deepWalk = (parent) => {
-    return Object.keys(parent).flatMap((child) => {
+  const deepWalk = (parent: any) => {
+    return Object.keys(parent).flatMap((child: any) => {
       if (Array.isArray(parent[child]) && typeof parent[child] === "object") {
         return parent[child];
       }
@@ -102,7 +102,7 @@ export async function GET() {
     });
   };
 
-  const promises = Object.keys(services).reduce((statusLog, service) => {
+  const promises = Object.keys(services).reduce((statusLog: any, service: any) => {
     const microservice = services[service];
 
     let iteree;
@@ -115,7 +115,7 @@ export async function GET() {
 
     statusLog[service] = [];
 
-    iteree.forEach((promise, index) => {
+    iteree.forEach((promise: any, index: number) => {
       statusLog[service][index] = promise.check(promise.url);
     });
 
