@@ -2,7 +2,7 @@
 // status view
 'use client';
 import { useMemo } from 'react';
-import { Globals, Logo, AudioPlayer, EGridVariant, Grid as DPGrid, EBleedVariant, Typography as DPTypo, TypographyVariant } from "@dreampipcom/oneiros";
+import { Globals, Logo, AudioPlayer, Grid as DPGrid, Typography as DPTypo, TypographyVariant } from "@dreampipcom/oneiros";
 import useSWR from 'swr'
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
