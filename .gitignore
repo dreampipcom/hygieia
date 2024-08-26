@@ -43,3 +43,5 @@ next-env.d.ts
 # private
 *.private
 stub.json
+# Sentry Config File
+.env.sentry-build-plugin
