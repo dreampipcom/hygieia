@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@dreampipcom/oneiros/styles";
 
 export const metadata: Metadata = {
   title: process.env.PATTERNS_TITLE,
