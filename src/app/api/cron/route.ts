@@ -9,7 +9,7 @@ async function fetchWithTimeout(resource: string, options: any) {
   const controller = new AbortController();
   const id = setTimeout(() => {
     controller.abort();
-    if (!!options.isStream) {
+    if (options?.isStream) {
         return { ok: true, status: 200 }
     }
   }, timeout);
