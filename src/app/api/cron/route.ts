@@ -17,6 +17,7 @@ async function fetchWithTimeout(resource: string, options: any) {
   const promise = await fetch(resource, {
     ...options,
     signal: controller.signal,
+    cache: 'no-store',
   });
 
   const response = promise;
