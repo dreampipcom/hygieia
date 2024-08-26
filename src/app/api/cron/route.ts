@@ -3,6 +3,8 @@
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
+export const revalidate = 0;
+
 async function fetchWithTimeout(resource: string, options: any) {
   const { timeout = 10000 } = options;
 
