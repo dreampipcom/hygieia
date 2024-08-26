@@ -139,6 +139,7 @@ export async function GET() {
                 range: "bytes=0-1",
               },
               isStream: true,
+              timeout: 3000,
             });
           },
         },
@@ -218,28 +219,43 @@ export async function GET() {
 
   let degraded;
   let degradedNames = [];
+  let flatServices = []
   for (const service of Object.keys(promises)) {
     let count = 0;
     for (const microservice of promises[service]) {
       const names = Object.keys(services[service]);
-      const serviceStatus = await microservice;
-      const statusMessage = serviceStatus ? "normal" : "degraded";
       const serviceName = `${service}-${names[count]}`;
-      status[service][names[count]] = statusMessage;
+      flatServices.push({ promise: microservice, serviceName })
+      count++;
+    }
+  }
+
+  const allPromises = [];
+  for (const service of flatServices) {
+    allPromises.push(await service.promise)
+  }
+  
+  const response = {}
+  await Promise.allSettled(allPromises).then((statuses) => {
+    statuses.forEach((statusObj, count) => {
+      const serviceStatus = statusObj.value;
+      const statusMessage = serviceStatus ? "normal" : "degraded";
+      const serviceName = flatServices[count].serviceName;
+      response[serviceName] = statusMessage;
       setTag(serviceName, statusMessage);
       if (statusMessage !== "normal") {
         degraded = true;
         degradedNames.push(serviceName);
       }
-      count++;
-    }
-  }
-  setContext({ name: "DreamPip Status", status });
+    })
+  });
+
+  setContext({ name: "DreamPip Status", status: response });
   captureMessage("Status: All systems normal.");
   const degradedServices = degradedNames.join(", ");
   if (degraded) captureException(`Status degraded: ${degradedServices}`);
   return NextResponse.json(
-    { ok: true, status },
+    { ok: true, status: response },
     {
       status: 207,
       headers: {
