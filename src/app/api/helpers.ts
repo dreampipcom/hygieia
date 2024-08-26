@@ -15,7 +15,7 @@ export async function fetchWithTimeout(resource: string, options: any) {
   const promise = await fetch(resource, {
     ...options,
     signal: controller.signal,
-    next: { revalidate: 0 },
+    next: { revalidate: options?.revalidate || 0 },
   });
 
   const response = promise;

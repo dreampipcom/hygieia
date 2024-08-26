@@ -4,10 +4,13 @@ import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { checkService } from "../helpers";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export async function GET() {
   const { captureMessage, captureException, setTag, setContext } = Sentry;
+
+  // to-do: add hash/salt crypto
+  // https://www.notion.so/angeloreale/Hygieia-Add-hash-salt-crypto-to-cron-endpoint-47b5efb309d6433599d1c8b0e5b4c002?pvs=4
   if(!process.env.NEXUS_KEEPALIVE) {
     return NextResponse.json(
     { ok: true, status: response },
@@ -202,9 +205,9 @@ export async function GET() {
     {
       status: 207,
       headers: {
-        "Cache-Control": "public, max-age=0 s-maxage=60",
-        "CDN-Cache-Control": "public, max-age=0 s-maxage=60",
-        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=60",
+        "Cache-Control": "public, max-age=0 s-maxage=0",
+        "CDN-Cache-Control": "public, max-age=0 s-maxage=0",
+        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=0",
       },
     },
   );

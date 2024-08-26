@@ -8,7 +8,7 @@ export const revalidate = 300;
 
 export async function GET() {
 	try {
-	  const res = await checkService(`${process.env.API_URL || 'https://status.dreampip.com'}/api/cron`, { cron: true });
+	  const res = await checkService(`${process.env.API_URL || 'https://status.dreampip.com'}/api/cron`, { cron: true, revalidate: 300 });
 	  const json = await res.json();
 
 	  return NextResponse.json(
