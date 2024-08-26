@@ -243,9 +243,9 @@ export async function GET() {
     {
       status: 207,
       headers: {
-        "Cache-Control": "public, max-age=0 s-maxage=60",
-        "CDN-Cache-Control": "public, max-age=0 s-maxage=60",
-        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=60",
+        "Cache-Control": "public, max-age=0 s-maxage=300",
+        "CDN-Cache-Control": "public, max-age=0 s-maxage=300",
+        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=300",
       },
     },
   );
