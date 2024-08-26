@@ -13,7 +13,6 @@ export const View = () => {
 		if (!services) return [];
 		const status = [];
 		for (const service of Object.keys(services)) {
-	    let count = 0;
 	    for (const microservice of Object.keys(services[service])) {
 	      const serviceStatus = services[service][microservice];
 	      status.push({ name: microservice, value: serviceStatus, parent: service })
