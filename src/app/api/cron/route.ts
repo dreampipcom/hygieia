@@ -1,12 +1,13 @@
 // @ts-nocheck
 /* add ts later */
 import { NextResponse } from "next/server";
-import { captureMessage, captureException, setTag, setContext } from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs";
 import { checkService } from "../helpers";
 
 export const revalidate = 60;
 
 export async function GET() {
+  const { captureMessage, captureException, setTag, setContext } = Sentry;
   if(!process.env.NEXUS_KEEPALIVE) {
     return NextResponse.json(
     { ok: true, status: response },

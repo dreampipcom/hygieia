@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { captureException } from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs";
 
 export async function fetchWithTimeout(resource: string, options: any) {
   const { timeout = 20000 } = options;
@@ -25,6 +25,7 @@ export async function fetchWithTimeout(resource: string, options: any) {
 };
 
 export const checkService = async (url: string, opts: any) => {
+	const { captureException } = Sentry;
   try {
     const res = await fetchWithTimeout(url, opts || {});
 

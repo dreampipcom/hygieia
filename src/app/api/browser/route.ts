@@ -2,6 +2,7 @@
 /* add ts later */
 import { NextResponse } from "next/server";
 import { checkService } from "../helpers";
+import * as Sentry from "@sentry/nextjs";
 
 export const revalidate = 300;
 
@@ -22,6 +23,8 @@ export async function GET() {
 	    },
 	  );
 	} catch(e) {
+		const { captureException } = Sentry;
+		captureException(e);
 		return NextResponse.json(
 	    { ok: false, status: {} },
 	    {
