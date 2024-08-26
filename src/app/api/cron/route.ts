@@ -1,7 +1,7 @@
 // @ts-nocheck
 /* add ts later */
 import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs"
+import * as Sentry from "@sentry/nextjs";
 
 async function fetchWithTimeout(resource: string, options: any) {
   const { timeout = 10000 } = options;
@@ -10,7 +10,7 @@ async function fetchWithTimeout(resource: string, options: any) {
   const id = setTimeout(() => {
     controller.abort();
     if (options?.isStream) {
-        return { ok: true, status: 200 }
+      return { ok: true, status: 200 };
     }
   }, timeout);
 
@@ -45,7 +45,7 @@ export async function GET() {
 
       return false;
     } catch (e) {
-      if(!opts.isStream) {
+      if (!opts.isStream) {
         captureException(e);
         console.error("--- ERROR: ", { url, status: 0, message: e });
         return false;
@@ -90,7 +90,7 @@ export async function GET() {
             return checkService(url, {
               method: "POST",
               headers: {
-                'x-dp-keepalive': process.env.NEXUS_KEEPALIVE,
+                "x-dp-keepalive": process.env.NEXUS_KEEPALIVE,
               },
             });
           },
@@ -213,33 +213,37 @@ export async function GET() {
     {},
   );
 
-  let degraded
-  let degradedNames = []
+  let degraded;
+  let degradedNames = [];
   for (const service of Object.keys(promises)) {
     let count = 0;
     for (const microservice of promises[service]) {
       const names = Object.keys(services[service]);
       const serviceStatus = await microservice;
       const statusMessage = serviceStatus ? "normal" : "degraded";
-      const serviceName = `${service}-${names[count]}`
+      const serviceName = `${service}-${names[count]}`;
       status[service][names[count]] = statusMessage;
       setTag(serviceName, statusMessage);
       if (statusMessage !== "normal") {
-        degraded = true
-        degradedNames.push(serviceName)
+        degraded = true;
+        degradedNames.push(serviceName);
       }
       count++;
     }
   }
   setContext({ name: "DreamPip Status", status });
   captureMessage("Status: All systems normal.");
-  const degradedServices = degradedNames.join(', ');
+  const degradedServices = degradedNames.join(", ");
   if (degraded) captureException(`Status degraded: ${degradedServices}`);
-  return NextResponse.json({ ok: true, status }, { status: 207,
-  headers: {
-      'Cache-Control': 'public, max-age=0 s-maxage=0',
-      'CDN-Cache-Control': 'public, max-age=0 s-maxage=0',
-      'Vercel-CDN-Cache-Control': 'public, max-age=0 s-maxage=0',
+  return NextResponse.json(
+    { ok: true, status },
+    {
+      status: 207,
+      headers: {
+        "Cache-Control": "public, max-age=0 s-maxage=0",
+        "CDN-Cache-Control": "public, max-age=0 s-maxage=0",
+        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=0",
+      },
     },
-  });
+  );
 }
