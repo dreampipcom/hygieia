@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 // status view
 'use client';
 import { useMemo } from 'react';
