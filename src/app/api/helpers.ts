@@ -1,4 +1,4 @@
-//ts-nocheck
+// @ts-nocheck
 import { captureException } from "@sentry/nextjs";
 
 export async function fetchWithTimeout(resource: string, options: any) {

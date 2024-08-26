@@ -1,7 +1,6 @@
 // @ts-nocheck
 /* add ts later */
 import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
 import { checkService } from "../helpers";
 
 export const revalidate = 300;
