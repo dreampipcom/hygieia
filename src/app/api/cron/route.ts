@@ -235,5 +235,11 @@ export async function GET() {
   captureMessage("Status: All systems normal.");
   const degradedServices = degradedNames.join(', ');
   if (degraded) captureException(`Status degraded: ${degradedServices}`);
-  return NextResponse.json({ ok: true, status }, { status: 207 });
+  return NextResponse.json({ ok: true, status }, { status: 207,
+  headers: {
+      'Cache-Control': 'public, max-age=0 s-maxage=0',
+      'CDN-Cache-Control': 'public, max-age=0 s-maxage=0',
+      'Vercel-CDN-Cache-Control': 'public, max-age=0 s-maxage=0',
+    },
+  });
 }
