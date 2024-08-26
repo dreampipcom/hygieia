@@ -43,10 +43,10 @@ export async function GET() {
           status: res.status,
           message: res.body,
         });
-        return true;
+        return false;
       }
 
-      return false;
+      return true;
     } catch (e) {
       if (!opts?.isStream) {
         captureException(e);
