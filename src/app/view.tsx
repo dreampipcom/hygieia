@@ -1,21 +1,12 @@
 // @block/topnav-view.tsx
 'use client';
 import { useMemo } from 'react';
-import { Globals, Logo, AudioPlayer, Button as DPButton, EGridVariant, Grid as DPGrid, EBleedVariant, Typography as DPTypo, TypographyVariant } from "@dreampipcom/oneiros";
+import { Globals, Logo, AudioPlayer, EGridVariant, Grid as DPGrid, EBleedVariant, Typography as DPTypo, TypographyVariant } from "@dreampipcom/oneiros";
 import useSWR from 'swr'
 
-interface IAuthProvider {
-  id?: string;
-  name?: string;
-}
-
-interface VTopNavProps {
-  user?: any;
-  services?: any;
-}
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-export const View = ({ user, services }: VTopNavProps) => {
+export const View = () => {
 	const { data, error, isLoading } = useSWR('/api/cron', fetcher, { refreshInterval: 1000 })
 	const parsedData = useMemo(() => {
 		const services = data?.status;
