@@ -25,7 +25,7 @@ const allowedOrigins = {
 const headers: Record<string, any> = {
   "Access-Control-Allow-Origin":
     `${process.env.MAIN_URL}` || "https://www.dreampip.com",
-  "Cache-Control": "maxage=0, s-maxage=300, stale-while-revalidate=300",
+  // "Cache-Control": "maxage=0, s-maxage=300, stale-while-revalidate=300",
   // DEV-DEBUG:
   // 'content-type': 'application/json',
   // 'Access-Control-Allow-Origin': 'http://localhost:2999',
