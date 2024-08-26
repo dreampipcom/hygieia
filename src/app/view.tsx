@@ -8,7 +8,7 @@ import useSWR from 'swr'
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 export const View = () => {
-	const { data, error, isLoading } = useSWR('/api/cron', fetcher, { refreshInterval: 1000 })
+	const { data, error, isLoading } = useSWR('/api/browser', fetcher, { refreshInterval: 1000 })
 	const parsedData = useMemo(() => {
 		if (!data) return []
 		return Object.keys(data?.status).map((_status) => {

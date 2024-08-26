@@ -1,61 +1,24 @@
 // @ts-nocheck
 /* add ts later */
 import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
+import { captureMessage, captureException, setTag, setContext } from "@sentry/nextjs";
+import { checkService } from "../helpers";
 
-export const revalidate = 300;
-
-async function fetchWithTimeout(resource: string, options: any) {
-  const { timeout = 20000 } = options;
-
-  const controller = new AbortController();
-  const id = setTimeout(() => {
-    controller.abort();
-    if (options?.isStream) {
-      return { ok: true, status: 200 };
-    }
-  }, timeout);
-
-  const promise = await fetch(resource, {
-    ...options,
-    signal: controller.signal,
-    next: { revalidate: 0 },
-  });
-
-  const response = promise;
-  clearTimeout(id);
-
-  return response;
-}
+export const revalidate = 60;
 
 export async function GET() {
-  const setTag = Sentry.setTag;
-  const setContext = Sentry.setContext;
-  const captureMessage = Sentry.captureMessage;
-  const captureException = Sentry.captureException;
-  const checkService = async (url: string, opts: any) => {
-    try {
-      const res = await fetchWithTimeout(url, opts || {});
-
-      if (!res.ok || res.status !== 200) {
-        console.error("--- ERROR: ", {
-          url,
-          status: res.status,
-          message: res.body,
-        });
-        return false;
-      }
-
-      return true;
-    } catch (e) {
-      if (!opts?.isStream) {
-        captureException(e);
-        console.error("--- ERROR: ", { url, status: 0, message: e });
-        return false;
-      }
-      return true;
-    }
-  };
+  if(!process.env.NEXUS_KEEPALIVE) {
+    return NextResponse.json(
+    { ok: true, status: response },
+    {
+      status: 403,
+      headers: {
+        "Cache-Control": "public, max-age=0 s-maxage=3600",
+        "CDN-Cache-Control": "public, max-age=0 s-maxage=3600",
+        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=3600",
+      },
+    })
+  }
 
   const services = {
     hypnos: {
@@ -238,9 +201,9 @@ export async function GET() {
     {
       status: 207,
       headers: {
-        "Cache-Control": "public, max-age=0 s-maxage=300",
-        "CDN-Cache-Control": "public, max-age=0 s-maxage=300",
-        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=300",
+        "Cache-Control": "public, max-age=0 s-maxage=60",
+        "CDN-Cache-Control": "public, max-age=0 s-maxage=60",
+        "Vercel-CDN-Cache-Control": "public, max-age=0 s-maxage=60",
       },
     },
   );
