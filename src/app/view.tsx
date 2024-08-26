@@ -1,7 +1,7 @@
 // @block/topnav-view.tsx
 'use client';
-import { useContext, useRef, useEffect, useState, useMemo } from 'react';
-import { Globals, Logo, AudioPlayer, Button as DPButton, EGridVariant, Grid as DPGrid, EBleedVariant, Typography as DPTypo, TypographyVariant, ESystemIcon } from "@dreampipcom/oneiros";
+import { useMemo } from 'react';
+import { Globals, Logo, AudioPlayer, Button as DPButton, EGridVariant, Grid as DPGrid, EBleedVariant, Typography as DPTypo, TypographyVariant } from "@dreampipcom/oneiros";
 import useSWR from 'swr'
 
 interface IAuthProvider {
