@@ -20,20 +20,16 @@ export const View = () => {
   return (
   	<Globals theme="dark">
   		<DPGrid full>
-		  	<main style={{width:"100vh", height:"100vw"}}>
-			    <DPGrid variant={EGridVariant.TWELVE_COLUMNS} bleed={EBleedVariant.RESPONSIVE} theme="dark">
-			      <Logo className="col-span-full md:col-span-3 col-start-0" />
-			      <div className="col-span-full md:col-span-4 col-start-0">
-			        	{error ? (<DPTypo>failed to load</DPTypo>) : undefined }
-								{isLoading ? (<DPTypo>loading...</DPTypo>) : undefined }
-								{data ? (<div>{parsedData?.map((service, i) => <div key={`service--${service.name}-${i}`}><DPTypo variant={TypographyVariant.SMALL}>{service.parent} ({service.name}): {service.value}</DPTypo></div>)}</div>) : undefined }
-			      </div>
-			      <DPGrid full bleed={EBleedVariant.ZERO} variant={EGridVariant.TWELVE_COLUMNS} className="col-span-12 col-start-0 md:justify-self-end md:col-span-5 md:col-start-8 lg:col-span-4 lg:col-start-9">
-			        <div className="flex w-full">
-			          <AudioPlayer prompt="" theme="dark" />
-			        </div>
-			      </DPGrid>
-			    </DPGrid>
+		  	<main style={{minWidth:"100vw", minHeight:"100vh", padding: '32px'}}>
+			    <div style={{ display: 'flex' }}>
+			      <Logo />
+			      <AudioPlayer prompt="" theme="dark" />
+			   </div>
+		     <DPGrid full>
+		        	{error ? (<DPTypo>failed to load</DPTypo>) : undefined }
+							{isLoading ? (<DPTypo>loading...</DPTypo>) : undefined }
+							{data ? (<div>{parsedData?.map((service, i) => <div key={`service--${service.name}-${i}`}><DPTypo variant={TypographyVariant.SMALL}>{service.parent} ({service.name}): {service.value}</DPTypo></div>)}</div>) : undefined }
+		     </DPGrid>
 		    </main>
 	    </DPGrid>
     </Globals>
