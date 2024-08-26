@@ -57,27 +57,6 @@ export async function GET() {
     }
   };
 
-  const status = {
-    hypnos: {
-      auth: "",
-      private: "",
-      public: "",
-    },
-    nyx: {
-      homepage: "",
-    },
-    morpheus: {
-      cms: "",
-      homepage: "",
-    },
-    euterpe: {
-      audio: "",
-    },
-    external: {
-      rickmorty: "",
-    },
-  };
-
   const services = {
     hypnos: {
       auth: [
