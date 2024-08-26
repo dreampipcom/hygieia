@@ -26,8 +26,8 @@ export const View = () => {
   		<DPGrid full>
 		  	<main style={{width:"100vh", height:"100vw"}}>
 			    <DPGrid variant={EGridVariant.TWELVE_COLUMNS} bleed={EBleedVariant.RESPONSIVE} theme="dark">
-			      <Logo className="col-span-3 col-start-0" />
-			      <div className="col-span-4 col-start-0">
+			      <Logo className="col-span-full md:col-span-3 col-start-0" />
+			      <div className="col-span-full md:col-span-4 col-start-0">
 			        	{error ? (<DPTypo>failed to load</DPTypo>) : undefined }
 								{isLoading ? (<DPTypo>loading...</DPTypo>) : undefined }
 								{data ? (<div>{parsedData.map((service, i) => <div key={`service--${service.name}-${i}`}><DPTypo variant={TypographyVariant.SMALL}>{service.parent} ({service.name}): {service.value}</DPTypo></div>)}</div>) : undefined }

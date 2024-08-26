@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/nextjs";
 export const revalidate = 300;
 
 async function fetchWithTimeout(resource: string, options: any) {
-  const { timeout = 10000 } = options;
+  const { timeout = 20000 } = options;
 
   const controller = new AbortController();
   const id = setTimeout(() => {
