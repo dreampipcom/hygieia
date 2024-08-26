@@ -233,9 +233,7 @@ export async function GET() {
   }
   setContext({ name: "DreamPip Status", status });
   captureMessage("Status: All systems normal.");
-  const degradedServices = degradedNames.join(', ')
-  console.log({ degradedNames, degradedServices })
+  const degradedServices = degradedNames.join(', ');
   if (degraded) captureException(`Status degraded: ${degradedServices}`);
-  console.log({ status });
   return NextResponse.json({ ok: true, status });
 }
