@@ -3,6 +3,8 @@
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
+export const fetchCache 'force-no-store;'
+
 async function fetchWithTimeout(resource: string, options: any) {
   const { timeout = 10000 } = options;
 
@@ -17,7 +19,6 @@ async function fetchWithTimeout(resource: string, options: any) {
   const promise = await fetch(resource, {
     ...options,
     signal: controller.signal,
-    cache: 'no-store',
   });
 
   const response = promise;
