@@ -46,7 +46,7 @@ export async function GET() {
 
       return false;
     } catch (e) {
-      if (!opts.isStream) {
+      if (!opts?.isStream) {
         captureException(e);
         console.error("--- ERROR: ", { url, status: 0, message: e });
         return false;
