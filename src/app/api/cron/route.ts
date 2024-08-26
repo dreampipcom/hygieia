@@ -1,12 +1,18 @@
 // @ts-nocheck
 /* add ts later */
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs"
 
 async function fetchWithTimeout(resource: string, options: any) {
-  const { timeout = 15000 } = options;
+  const { timeout = 10000 } = options;
 
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
+  const id = setTimeout(() => {
+    controller.abort();
+    if (!!options.isStream) {
+        return { ok: true, status: 200 }
+    }
+  }, timeout);
 
   const promise = await fetch(resource, {
     ...options,
@@ -20,6 +26,10 @@ async function fetchWithTimeout(resource: string, options: any) {
 }
 
 export async function GET() {
+  const setTag = Sentry.setTag;
+  const setContext = Sentry.setContext;
+  const captureMessage = Sentry.captureMessage;
+  const captureException = Sentry.captureException;
   const checkService = async (url: string, opts: any) => {
     try {
       const res = await fetchWithTimeout(url, opts || {});
@@ -30,13 +40,17 @@ export async function GET() {
           status: res.status,
           message: res.body,
         });
-        return false;
+        return true;
       }
 
-      return true;
-    } catch (e) {
-      console.error("--- ERROR: ", { url, status: 0, message: e });
       return false;
+    } catch (e) {
+      if(!opts.isStream) {
+        captureException(e);
+        console.error("--- ERROR: ", { url, status: 0, message: e });
+        return false;
+      }
+      return true;
     }
   };
 
@@ -121,6 +135,7 @@ export async function GET() {
               headers: {
                 range: "bytes=0-1",
               },
+              isStream: true,
             });
           },
         },
@@ -198,15 +213,29 @@ export async function GET() {
     {},
   );
 
+  let degraded
+  let degradedNames = []
   for (const service of Object.keys(promises)) {
     let count = 0;
     for (const microservice of promises[service]) {
       const names = Object.keys(services[service]);
       const serviceStatus = await microservice;
-      status[service][names[count]] = serviceStatus ? "normal" : "degraded";
+      const statusMessage = serviceStatus ? "normal" : "degraded";
+      const serviceName = `${service}-${names[count]}`
+      status[service][names[count]] = statusMessage;
+      setTag(serviceName, statusMessage);
+      if (statusMessage !== "normal") {
+        degraded = true
+        degradedNames.push(serviceName)
+      }
       count++;
     }
   }
-  console.log({ status })
+  setContext({ name: "DreamPip Status", status });
+  captureMessage("Status: All systems normal.");
+  const degradedServices = degradedNames.join(', ')
+  console.log({ degradedNames, degradedServices })
+  if (degraded) captureException(`Status degraded: ${degradedServices}`);
+  console.log({ status });
   return NextResponse.json({ ok: true, status });
 }
