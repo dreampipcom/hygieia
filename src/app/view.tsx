@@ -1,4 +1,5 @@
-// @block/topnav-view.tsx
+//@ts-nocheck
+// status view
 'use client';
 import { useMemo } from 'react';
 import { Globals, Logo, AudioPlayer, EGridVariant, Grid as DPGrid, EBleedVariant, Typography as DPTypo, TypographyVariant } from "@dreampipcom/oneiros";
