@@ -15,7 +15,7 @@ export async function fetchWithTimeout(resource: string, options: any) {
   const promise = await fetch(resource, {
     ...options,
     headers: {
-    	'x-dp-keepalive': !options.cron ? `dp-health-check=${process.env.NEXUS_KEEPALIVE}` : undefined,
+    	'x-dp-keepalive': !options.cron ? `${process.env.NEXUS_KEEPALIVE}` : undefined,
 			cookie: !options.cron ? `dp-health-check=${process.env.NEXUS_KEEPALIVE}` : undefined,
     },
     signal: controller.signal,
