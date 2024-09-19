@@ -18,7 +18,7 @@
   "dependencies": {
     "@dreampipcom/oneiros": "0.0.25",
     "@sentry/nextjs": "^8.20.0",
-    "next": "14.2.4",
+    "next": "14.2.10",
     "swr": "^2.2.5"
   },
   "devDependencies": {
